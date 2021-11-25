@@ -1,14 +1,20 @@
 #!/bin/bash
 
+set -eu
+
+APACHE_CTL="apachectl"
+
+# Some variables are detected automatically their values.
 APACHE_SERVER_ADMIN="root@localhost"
-APACHE_USER="apache"
-APACHE_GROUP="apache"
+APACHE_USER=$(${APACHE_CTL} -S | grep 'User: ' | awk 'BEGIN{FS="\""}{print $2}')
+APACHE_GROUP=$(${APACHE_CTL} -S | grep 'Group: ' | awk 'BEGIN{FS="\""}{print $2}')
 APACHE_VHOST_PORT="80"
 APACHE_VHOST_NAME=""
 APACHE_LOG_DIR="/var/log/httpd"
 APACHE_ACCESS_LOG_NAME="access_log"
 APACHE_ERROR_LOG_NAME="error_log"
-APACHE_VHOST_CONF_DIR="/etc/httpd/vhosts"
+APACHE_VHOST_CONF_DIR=$(${APACHE_CTL} -S | grep 'ServerRoot: ' | awk 'BEGIN{FS="\""}{print $2}')
+APACHE_VHOST_CONF_PREFIX="vhost_"
 APACHE_VHOST_ROOT_DIR="/var/www/vhosts"
 APACHE_VHOST_DOC_ROOT_NAME="html"
 
@@ -17,7 +23,6 @@ APACHE_VHOST_SSL_PORT="443"
 APACHE_VHOST_SSL_CERT_FILE=""
 APACHE_VHOST_SSL_CERT_KEY_FILE=""
 
-APACHE_CTL="apachectl"
 current_date=$(date)
 
 help() {
@@ -39,6 +44,35 @@ USAGE: $0 [options] {vhost_name}
 EOS
 }
 
+get_next_vhost_no() {
+    number=$(
+        find /etc/httpd/conf.d/ -type f -name ${APACHE_VHOST_CONF_PREFIX}'*.conf' \
+            | awk --assign=prefix=${APACHE_VHOST_CONF_PREFIX} 'BEGIN{FS=prefix}{print $(NF)}' \
+                | awk 'BEGIN{FS="-"}{print $1}' \
+                    | sort -r \
+                        | head -n 1
+    )
+    
+    # Cast to integer
+    number=$(expr ${number} + 0)
+
+    # Increment
+    if [ "${number}" -gt 0 ];
+    then
+        number=$(expr ${number} + 1)
+    fi
+
+    # Zerofill
+    if [ "${number}" -lt 10 ];
+    then
+        number="0${number}"
+    fi
+
+    # Do not concider greater number 99.
+
+    echo ${number}
+}
+
 OPTS=`getopt -o hug: --long admin,user,group,log-dir,access-log-name,error-log-name,root-dir,doc-root-name,use-ssl,ssl-cert,ssl-cert-key,help: -n 'parse-options' -- "$@"`
 
 if [ $? != 0 ] ;
@@ -53,7 +87,7 @@ while true; do
         -u | --user )       APACHE_USER="$2";                    shift; shift ;;
         -g | --group )      APACHE_GROUP="$2";                   shift; shift ;;
         -p | --port )       APACHE_VHOST_PORT="$2";              shift; shift ;;
-        --admin )      APACHE_SERVER_ADMIN="$2";            shift; shift ;;
+        --admin )           APACHE_SERVER_ADMIN="$2";            shift; shift ;;
         --use-ssl )         APACHE_USE_SSL=true;                 shift ;;
         --ssl-port )        APACHE_VHOST_SSL_PORT="$2";          shift; shift ;;
         --ssl-cert )        APACHE_VHOST_SSL_CERT_FILE="$2";     shift; shift ;;
@@ -191,3 +225,4 @@ else
     ${APACHE_CTL} ${apache_com}
 fi
 
+# vim: expandtab tabstop=4 softtabstop=4 shiftwidth=4 smarttab :
