@@ -39,17 +39,17 @@ Apache Virtual Host Creation Tool
     Version ${VERSION}
 
 USAGE: $0 {vhost_name} [options]
-    --admin            Email address of server admin. Default is '${APACHE_SERVER_ADMIN}'.
-    -u, --user         Owner name. Default is '${APACHE_USER}', automatically detected from configuration of Apache.
-    -g, --group        Owner group. Default is '${APACHE_USER}', automatically detected from configuration of Apache.
-    -p, --port         Listening port of virtual host. Default is '${APACHE_VHOST_PORT}', automatically detected from configuration of Apache.
-    --log_dir          Path to log directory. Default is '${APACHE_LOG_DIR}'.
-    --access-log-name  Name of access log file. Default is '${APACHE_ACCESS_LOG_NAME}'.
-    --error-log-name   Name of error log file. Default is '${APACHE_ERROR_LOG_NAME}'.
-    --root-dir         Path to virtual host root directory. Default is '${APACHE_VHOST_ROOT_DIR}'.
-    --doc-root-name    Name of document root directory. Default is '${APACHE_VHOST_DOC_ROOT_NAME}'.
-    --use-ssl          No value. Default is false. When this argument is given, --ssl-cert and --ssl-cert-key arguments are required.
-    --ssl-port         Listening port of SSL virtual host. Default is '${APACHE_VHOST_SSL_PORT}'.
+    --admin            Email address of server admin. Default value is '${APACHE_SERVER_ADMIN}'.
+    -u, --user         Owner name. Default value is '${APACHE_USER}', automatically detected from configuration of Apache.
+    -g, --group        Owner group. Default value is '${APACHE_USER}', automatically detected from configuration of Apache.
+    -p, --port         Listening port of virtual host. Default value is '${APACHE_VHOST_PORT}'.
+    --log_dir          Path to log directory. Default value is '${APACHE_LOG_DIR}'.
+    --access-log-name  Name of access log file. Default value is '${APACHE_ACCESS_LOG_NAME}'.
+    --error-log-name   Name of error log file. Default value is '${APACHE_ERROR_LOG_NAME}'.
+    --root-dir         Path to virtual host root directory. Default value is '${APACHE_VHOST_ROOT_DIR}'.
+    --doc-root-name    Name of document root directory. Default value is '${APACHE_VHOST_DOC_ROOT_NAME}'.
+    --use-ssl          No value. Default value is false. When this argument is given, --ssl-cert and --ssl-cert-key arguments are required.
+    --ssl-port         Listening port of SSL virtual host. Default value is '${APACHE_VHOST_SSL_PORT}'.
     --ssl-cert         Path to SSL certificate file.
     --ssl-cert-key     Path to SSL certificate key file.
 EOS
