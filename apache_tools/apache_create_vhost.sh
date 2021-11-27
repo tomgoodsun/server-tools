@@ -1,7 +1,15 @@
 #!/bin/bash
 
+# Apache Virtual Host Creation Tool
+#
+# Version 1.0
+# Copyright (c) 2021 Tom Higuchi (https://tom-gs.com/)
+# Released under the MIT license
+# https://opensource.org/licenses/mit-license.php
+
 set -eu
 
+readonly VERSION="1.0"
 APACHE_CTL="apachectl"
 
 # Some variables are detected automatically their values.
@@ -27,17 +35,20 @@ current_date=$(date)
 
 help() {
     cat << EOS
-USAGE: $0 [options] {vhost_name}
+Apache Virtual Host Creation Tool
+    Version ${VERSION}
+
+USAGE: $0 {vhost_name} [options]
     --admin            Email address of server admin. Default is '${APACHE_SERVER_ADMIN}'.
-    -u, --user         Owner name. Default is '${APACHE_USER}'.
-    -g, --group        Owner group. Default is '${APACHE_USER}'.
-    -p, --port         Listening port of virtual host. Default is '${APACHE_VHOST_PORT}'.
+    -u, --user         Owner name. Default is '${APACHE_USER}', automatically detected from configuration of Apache.
+    -g, --group        Owner group. Default is '${APACHE_USER}', automatically detected from configuration of Apache.
+    -p, --port         Listening port of virtual host. Default is '${APACHE_VHOST_PORT}', automatically detected from configuration of Apache.
     --log_dir          Path to log directory. Default is '${APACHE_LOG_DIR}'.
     --access-log-name  Name of access log file. Default is '${APACHE_ACCESS_LOG_NAME}'.
     --error-log-name   Name of error log file. Default is '${APACHE_ERROR_LOG_NAME}'.
     --root-dir         Path to virtual host root directory. Default is '${APACHE_VHOST_ROOT_DIR}'.
     --doc-root-name    Name of document root directory. Default is '${APACHE_VHOST_DOC_ROOT_NAME}'.
-    --use-ssl          No value. Default is false.
+    --use-ssl          No value. Default is false. When this argument is given, --ssl-cert and --ssl-cert-key arguments are required.
     --ssl-port         Listening port of SSL virtual host. Default is '${APACHE_VHOST_SSL_PORT}'.
     --ssl-cert         Path to SSL certificate file.
     --ssl-cert-key     Path to SSL certificate key file.
@@ -73,7 +84,7 @@ get_next_vhost_no() {
     echo ${number}
 }
 
-OPTS=`getopt -o hug: --long admin,user,group,log-dir,access-log-name,error-log-name,root-dir,doc-root-name,use-ssl,ssl-cert,ssl-cert-key,help: -n 'parse-options' -- "$@"`
+OPTS=$(getopt -o hug: --long admin,user,group,log-dir,access-log-name,error-log-name,root-dir,doc-root-name,use-ssl,ssl-cert,ssl-cert-key,help: -n 'parse-options' -- "$@")
 
 if [ $? != 0 ] ;
 then
@@ -145,7 +156,7 @@ fi
 
 # Check if config file already exists or not.
 vhost_conf=${APACHE_VHOST_CONF_DIR}/${APACHE_VHOST_CONF_PREFIX}$(get_next_vhost_no)-${APACHE_VHOST_NAME}.conf
-same_vhost_count=$(grep "${APACHE_VHOST_NAME}" ${APACHE_VHOST_CONF_DIR}/${APACHE_VHOST_CONF_PREFIX}*.conf | wc -l)
+same_vhost_count=$(${APACHE_CTL}  -t -D DUMP_VHOSTS | grep "${APACHE_VHOST_NAME}" | wc -l)
 if [ ${same_vhost_count} != 0 ];
 then
     echo "Virtual host conf for '${APACHE_VHOST_NAME}' already exists."
@@ -158,7 +169,7 @@ if [ "${APACHE_USE_SSL}" = "true" ];
 then
     if [ "${APACHE_VHOST_SSL_CERT_FILE}" = "" ] || [ "${APACHE_VHOST_SSL_CERT_KEY_FILE}" = "" ];
     then
-        echo "--use-ssl requires arguments --ssl-cert and  --ssl-cert-key."
+        echo "--use-ssl requires arguments --ssl-cert and --ssl-cert-key."
         exit 1
     fi
 fi
