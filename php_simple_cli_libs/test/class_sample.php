@@ -27,7 +27,7 @@ class SampleCli
     }
 }
 
-CliLibs::readInput(
+CliLib::readInput(
     'Type \'yes\' or \'no\': ',
     SampleCli::getJudgingFunction(),
     SampleCli::getNextFunction(),

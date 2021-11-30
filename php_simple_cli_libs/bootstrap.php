@@ -1,0 +1,3 @@
+<?php
+
+$arg = new CliArgs();

@@ -1,6 +1,15 @@
 <?php
-class CliLibs
+class CliLib
 {
+
+    public static function createCommand()
+    {
+    }
+
+    public static function args()
+    {
+    }
+
     /**
      * Wait and read stdin
      *

@@ -14,7 +14,7 @@ $nextFunction = function ($input)
     echo $input . "\n";
 };
 
-CliLibs::readInput(
+CliLib::readInput(
     'Type \'yes\' or \'no\': ',
     $judgingFunction,
     $nextFunction,
