@@ -1,13 +1,13 @@
 <?php
 class CliLib
 {
-
-    public static function createCommand()
+    private function __construct()
     {
     }
 
-    public static function args()
+    public static function createCommand(\Closure $func)
     {
+        $func();
     }
 
     /**

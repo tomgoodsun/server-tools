@@ -4,55 +4,79 @@ class CliArgs
     /**
      * @var string
      */
-    private $script;
+    private static $scriptPath;
+
+    /**
+     * @var string
+     */
+    private static $scriptFullPath;
 
     /**
      * @var array
      */
-    private $args = [];
+    private static $args = [];
 
     /**
-     * Constructor
-     */    
-    public function __construct()
+     * Initialize
+     */
+    public static function init()
     {
-        $this->parseArg();
+        self::parseArg();
     }
 
     /**
      * Parse command line arguments
      */    
-    private function parseArg()
+    private static function parseArg()
     {
 
         foreach ($_SERVER['argv'] as $i => $arg) {
             if (0 == $i) {
-                $this->script = $arg;
+                self::$scriptPath = $arg;
+                self::$scriptFullPath = $_SERVER['PWD'] . DIRECTORY_SEPARATOR . $arg;
                 continue;
             }
 
             if (preg_match('/^\-\-[a-zA-Z0-9\-_].*=/', $arg)) {
                 $pos = strpos($arg, '=');
-                $this->arg[substr($arg, 0, $pos)] = substr($arg, $pos + 1);
+                self::$args[substr($arg, 2, $pos - 1)] = substr($arg, $pos + 1);
             } elseif (preg_match('/^\-\-[a-zA-Z0-9\-_].+$/', $arg)) {
-                $this->args[preg_replace('/^\-\-/', '', $arg)] = true;
-            } elseif (preg_match('/^\-[a-zA-Z0-9].$/', $arg)) {
-                $this->args[preg_replace('/^\-/', '', $arg)] = true;
+                self::$args[preg_replace('/^\-\-/', '', $arg)] = true;
+            } elseif (preg_match('/^\-[a-zA-Z0-9]$/', $arg)) {
+                self::$args[preg_replace('/^\-/', '', $arg)] = true;
             }
         }
+    }
 
-        var_dump($this->args);
+    /**
+     * Get script path
+     *
+     * @return string
+     */
+    public static function getScriptPath()
+    {
+        return self::$scriptPath;
+    }
+
+    /**
+     * Get script full path
+     *
+     * @return string
+     */
+    public static function getScriptFullPath()
+    {
+        return self::$scriptFullPath;
     }
 
     /**
      * Get argument value
      *
      * @return null|bool|string|int
-     */    
-    public function getArg($name)
+     */
+    public static function getArg($name)
     {
-        if (array_key_exists($name, $this->arg)) {
-            return $this->arg[$name];
+        if (array_key_exists($name, self::$args)) {
+            return self::$args[$name];
         }
         return null;
     }

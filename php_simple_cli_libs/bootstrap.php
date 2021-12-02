@@ -1,3 +1,5 @@
 <?php
 
-$arg = new CliArgs();
+// Initialize command line args
+CliArgs::init();
+

@@ -27,10 +27,12 @@ class SampleCli
     }
 }
 
-CliLib::readInput(
-    'Type \'yes\' or \'no\': ',
-    SampleCli::getJudgingFunction(),
-    SampleCli::getNextFunction(),
-    'Answer just \'yes\' or \'no\': '
-);
+CliLib::createCommand(function () {
+    CliLib::readInput(
+        'Type \'yes\' or \'no\': ',
+        SampleCli::getJudgingFunction(),
+        SampleCli::getNextFunction(),
+        'Answer just \'yes\' or \'no\': '
+    );
+});
 
