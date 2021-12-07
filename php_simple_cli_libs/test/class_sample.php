@@ -7,29 +7,6 @@ class SampleCli extends Command
     private $banana = '';
     private $coffee = '';
 
-    /**
-     * @return \Closure
-     */    
-    public static function getJudgingFunction()
-    {
-        return function ($input) {
-            if ($input == "no\n" || $input == "yes\n") {
-                return true;
-            }
-            return false;
-        };
-    }
-
-    /**
-     * @return \Closure
-     */    
-    public static function getNextFunction()
-    {
-        return function ($input) {
-            echo $input . "\n";
-        };
-    }
-
     protected function main()
     {
         $msg = 'Answer just \'yes\' or \'no\': ';
