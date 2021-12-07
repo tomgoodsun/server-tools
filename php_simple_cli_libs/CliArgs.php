@@ -39,7 +39,7 @@ class CliArgs
 
             if (preg_match('/^\-\-[a-zA-Z0-9\-_].*=/', $arg)) {
                 $pos = strpos($arg, '=');
-                self::$args[substr($arg, 2, $pos - 1)] = substr($arg, $pos + 1);
+                self::$args[substr($arg, 2, $pos - 2)] = substr($arg, $pos + 1);
             } elseif (preg_match('/^\-\-[a-zA-Z0-9\-_].+$/', $arg)) {
                 self::$args[preg_replace('/^\-\-/', '', $arg)] = true;
             } elseif (preg_match('/^\-[a-zA-Z0-9]$/', $arg)) {
@@ -73,7 +73,7 @@ class CliArgs
      *
      * @return null|bool|string|int
      */
-    public static function getArg($name)
+    public static function getArg(string $name)
     {
         if (array_key_exists($name, self::$args)) {
             return self::$args[$name];

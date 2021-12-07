@@ -1,30 +1,16 @@
 <?php
-class CliLib
+class CliUtil
 {
-    private function __construct()
-    {
-    }
-
-    public static function createCommand(\Closure $func)
-    {
-        $func();
-    }
-
     /**
      * Wait and read stdin
      *
      * @param string $questionMsg
      * @param \Closure $judgingFunction
-     * @param \Closure $nextFunction
      * @param string $msgForUnexceptedAction
      * @return void
      */    
-    public static function readInput(
-        string $questionMsg,
-        \Closure $judgingFunction,
-        \Closure $nextFunction,
-        string $msgForUnexceptedAction
-    ) {
+    public static function readInput(string $questionMsg, \Closure $judgingFunction, string $msgForUnexceptedAction)
+    {
         echo $questionMsg;
         $input = null;
         $inputReceived = false;
@@ -35,7 +21,7 @@ class CliLib
                 echo $msgForUnexceptedAction;
             }
         }
-        $nextFunction(trim($input));
+        return trim($input);
     }
 }
 
