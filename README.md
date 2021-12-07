@@ -23,3 +23,43 @@ USAGE: apache_tools/apache_create_vhost.sh {vhost_name} [options]
     --ssl-cert         Path to SSL certificate file.
     --ssl-cert-key     Path to SSL certificate key file.
 ```
+
+## Simple PHP command line artgument and answering utility
+
+Just include `php_simple_cli_libs/include.php` in your script.
+See more details in the follwing sample scripts.
+
+### function implementation
+
+[`php_simple_cli_libs/test/function_sample.php`](php_simple_cli_libs/test/function_sample.php)
+
+```
+$ php test/function_sample.php -a --long --long-arg-with=value
+Do you like apple? (yes / no): yes
+Do you like banana? (yes / no): yes
+Do you like coffee? (yes / no): yes
+'a' is in command line args.
+'long-arg-with' is in command line args and value is 'value'.
+You like apple: yes
+You like banana: yes
+You like coffee: yes
+```
+
+### class implementation
+
+[`php_simple_cli_libs/test/class_sample.php`](php_simple_cli_libs/test/class_sample.php)
+
+```
+$ php test/class_sample.php -a --long-arg --long-arg-with=value
+Do you like apple? (yes / no): yes
+Do you like banana? (yes / no): yes
+Do you like coffee? (yes / no): yes
+'a' is in command line args.
+'long-arg' is in command line args.
+'long-arg-with' is in command line args and value is 'value'.
+You like apple: yes
+You like banana: yes
+You like coffee: yes
+```
+
+
