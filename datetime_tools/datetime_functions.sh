@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Apache Virtual Host Creation Tool
+# Datetime tool for shell script
 #
 # Version 1.0
 # Copyright (c) 2021 Tom Higuchi (https://tom-gs.com/)
