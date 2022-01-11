@@ -24,6 +24,16 @@ USAGE: apache_tools/apache_create_vhost.sh {vhost_name} [options]
     --ssl-cert-key     Path to SSL certificate key file.
 ```
 
+## Datetime Tool for shell script
+
+Just include script like:
+
+```bash
+source server-tools/datetime_tools/datetime_functions.sh
+```
+
+For more details, see https://qiita.com/tomgoodsun/items/2da36c6ee907a26ff756
+
 ## Simple PHP command line artgument and answering utility
 
 Just include `php_simple_cli_libs/include.php` in your script.
